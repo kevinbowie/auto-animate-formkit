@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Animate</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 p-4">
+    <h3 class="text-2xl font-bold text-center text-blue-600 mb-4">
+      Auto Animate FormKit
+    </h3>
+
+    <ul id="myList" class="list-disc pl-5">
+      <li
+        data-id="1"
+        class="mb-2 px-4 py-2 bg-green-500 text-white rounded cursor-pointer relative"
+      >
+        Testing 1
+        <button
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 text-red-500 px-2 py-1 rounded hover:text-red-700 delete-btn"
+        >
+          X
+        </button>
+      </li>
+      <li
+        data-id="2"
+        class="mb-2 px-4 py-2 bg-green-500 text-white rounded cursor-pointer relative"
+      >
+        Testing 2
+        <button
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 text-red-500 px-2 py-1 rounded hover:text-red-700 delete-btn"
+        >
+          X
+        </button>
+      </li>
+      <li
+        data-id="3"
+        class="mb-2 px-4 py-2 bg-green-500 text-white rounded cursor-pointer relative"
+      >
+        Testing 3
+        <button
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 text-red-500 px-2 py-1 rounded hover:text-red-700 delete-btn"
+        >
+          X
+        </button>
+      </li>
+    </ul>
+    <button id="btn-add" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+      Add
+    </button>
+  </body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+<script type="module">
+  import autoAnimate from "https://cdn.jsdelivr.net/npm/@formkit/auto-animate";
+  // magic happens here
+  autoAnimate(document.getElementById("myList"));
+
+  document.getElementById("btn-add").addEventListener("click", function () {
+    const list = document.getElementById("myList");
+    const latestItem = list.lastElementChild;
+
+    const newItem = latestItem.cloneNode(true);
+    const newId = parseInt(latestItem.dataset.id) + 1;
+    newItem.setAttribute("data-id", newId);
+    newItem.firstChild.textContent = `Testing ${newId}`;
+
+    list.appendChild(newItem);
+  });
+
+  document.getElementById("myList").addEventListener("click", function (e) {
+    if (e.target && e.target.classList.contains("delete-btn")) {
+      e.target.parentElement.remove();
+      resetListIds();
+    }
+  });
+
+  new Sortable(document.getElementById("myList"));
+
+  function resetListIds() {
+    const listItems = document.querySelectorAll("#myList li");
+    listItems.forEach((item, index) => {
+      const newId = index + 1;
+      item.setAttribute("data-id", newId);
+      item.firstChild.textContent = `Testing ${newId}`;
+    });
+  }
+</script>
